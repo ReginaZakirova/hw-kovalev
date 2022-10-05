@@ -19,9 +19,9 @@
                 <ul class="nav-ul">
                     <li><a href="index.php">ГЛАВНАЯ</a></li>
                     <li><a href="table.php">ТАБЛИЦА</a></li>
-                    <li><a href="hw-23.09.php">ЦИКЛЫ</a></li>
-                    <li><a href="hw-26.09.php">МАССИВЫ</a></li>
-                    <li><a href="hw-29.09.php">СТРОКИ</a></li>
+                    <li><a href="loop.php">ЦИКЛЫ</a></li>
+                    <li><a href="array.php">МАССИВЫ</a></li>
+                    <li><a href="string.php">СТРОКИ</a></li>
                 </ul>
             </nav>
         </div>

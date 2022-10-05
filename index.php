@@ -1,5 +1,6 @@
     <?php
         require_once("header.php");
+
         /*  Поместим весь фразовый контент индексного файла в один ассоциативный массив. */
         $arr_content = [
                 "name_text" => "Ковалев Виктор",
@@ -23,17 +24,65 @@
                 "picture4_text" => "'Регина заставляет самостоятельно искать необходимые теги и свойства для решения " .
                     "заданий? Возьми ежа и кинь в Регину!' - ухахатывается маленький панда!"
         ];
-        /*  На основе базового массива $arr_content создадим два массива с идентичными ключами:
-            1. Массив $arr_content_word состоит из слов с разделением по пробелу
-            2. Массив $arr_content_char состоит из одиночных символов
-            И да - я использую функцию mb_str_split (>= PHP 7.4) - а что делать!? */
-        $arr_content_word = [];
-        $arr_content_char = [];
-        foreach ($arr_content as $content_key => $content_text) {
-            $arr_content_word[$content_key] = explode(' ', $content_text);
-            $arr_content_char[$content_key] = mb_str_split($content_text);
+
+        /*  Функция evencolor() выводит четные и нечетные слова строки разным цветом */
+        function evencolor($str) {
+            $arr = explode(' ', $str);
+            /* Вывод четных и нечетных слов согласно состоянию логического флага четного слова $even */
+            $even = false;
+            foreach ($arr as $word) {
+                $even = !$even; // Инвертируем флаг четности каждый раз.
+                if ($even) {
+                    echo "<span class='red'> $word  </span>";
+                }
+                else {
+                    echo "<span class='blue'> $word  </span>";
+                }
+            }
         }
+
+        /*  Функция str_count_word() возвращает количество слов в строке */
+        function str_count_word($str) {
+            $arr = explode(' ', $str);
+            $count = 0;
+            foreach ($arr as $word) {
+                    $count++;
+                    /* Проверка на одиночные спецсимволы */
+                    if ($word == ',' or $word == ':' or $word == '-') {
+                        $count--;
+                    }
+            }
+            return $count;
+        }
+
+        /*  Функция str_count_char() возвращает количество гласных букв в строке */
+        function str_count_vowel($str) {
+            $arr = mb_str_split($str);
+            $count = 0;
+            /* Подсчет гласных букв выполняется по многосложному логическому условию - перебором всех гласных */
+            foreach ($arr as $char) {
+                    if ($char == 'а' or $char == 'е' or $char == 'и' or $char == 'о' or $char == 'у' or
+                        $char == 'ы' or $char == 'э' or $char == 'ю' or $char == 'я' or $char == 'А' or
+                        $char == 'Е' or $char == 'И' or $char == 'О' or $char == 'У' or $char == 'Э' or
+                        $char == 'Ы' or $char == 'Ю' or $char == 'Я') {
+                        $count++;
+                    }
+            }
+            return $count;
+        }
+
+        /* Функция diff_days() возвращает разницу в датах */
+        function diff_days($birthdate) {
+            /* Определяем разницу в датах посредством функции strtotime() по UNIX времени в секундах.
+               Для этого предварительно переформатируем дату рождения с российского на американский формат,
+               как того требует функция strtotime() */
+            $birthdate = str_replace(".", "-", $birthdate);
+            return floor((strtotime(date("d-m-Y")) - strtotime($birthdate)) / (60 * 60 * 24));
+        }
+
+        /* !!! ИСПОЛЬЗОВАНИЕ ПОЛЬЗОВАТЕЛЬСКИХ ФУНКЦИЙ СМОТРЕТЬ В КОНЦЕ ДАННОЙ СТРАНИЦЫ !!! */
     ?>
+
     <main class="main">
         <!--            Секция main-first           -->
         <section class="main-first">
@@ -57,17 +106,7 @@
             <div class="review">
                 <p>
                     <?php
-                    /* Вывод четных и нечетных слов согласно состоянию логического флага четного слова $even */
-                        $even = false;
-                        foreach ($arr_content_word["review_text"] as $word_review) {
-                            $even = !$even; // Инвертируем флаг четности каждый раз.
-                            if ($even) {
-                                echo "<span class='red'> $word_review  </span>";
-                            }
-                            else {
-                                echo "<span class='blue'> $word_review  </span>";
-                            }
-                        }
+                        evencolor($arr_content["review_text"]);
                     ?>
                 </p>
             </div>
@@ -145,41 +184,30 @@
         <br>
         <hr>
         <h3> Домашнее задание от 29.09.2022</h3>
+
         <?php
-            /* Подсчет гласных букв выполняется по многосложному логическому условию - перебором всех гласных */
-            $char_count = 0;
-            foreach ($arr_content_char as $chars) {
-                foreach ($chars as $char) {
-                    if ($char == 'а' or $char == 'е' or $char == 'и' or $char == 'о' or $char == 'у' or
-                        $char == 'ы' or $char == 'э' or $char == 'ю' or $char == 'я' or $char == 'А' or
-                        $char == 'Е' or $char == 'И' or $char == 'О' or $char == 'У' or $char == 'Э' or
-                        $char == 'Ы' or $char == 'Ю' or $char == 'Я') {
-                        $char_count++;
-                    }
-                }
+            /* Подсчет и вывод слов на странице */
+            $total_word = 0;
+            foreach($arr_content as $string) {
+                $total_word += str_count_word($string);
             }
-            echo "<br> Количество гласных на странице: $char_count";
+            echo "<br> Количество слов на странице: $total_word";
 
-            /* Подсчет слов выполняется за вычетом одиночных спецсимволов */
-            $word_count = 0;
-            foreach ($arr_content_word as $words) {
-                foreach ($words as $word) {
-                     $word_count++;
-                    /* Проверка на одиночные спецсимволы */
-                    if ($word == ',' or $word == ':' or $word == '-') {
-                        $word_count--;
-                    }
-                }
+            /* Подсчет и вывод гласных букв на странице */
+            $total_vowel = 0;
+            foreach($arr_content as $string) {
+                $total_vowel += str_count_vowel($string);
             }
-            echo "<br> Количество слов на странице: $word_count<br><br>";
+            echo "<br> Количество гласных букв на странице: $total_vowel<br><br>";
 
-            /* Определяем разницу в датах посредством функции strtotime по UNIX времени в секундах */
+            /* Вывод даты и разницы в днях */
             $birthdate = "09.01.1982";
             $currentdate = date("d.m.Y");
             echo "Дата рождения: $birthdate <br> Дата текущая: $currentdate <br>";
-            $diffdate = floor((strtotime(date("d-m-Y")) - strtotime("09-01-1982")) / (60 * 60 * 24));
-            echo "Количество дней между датами: $diffdate";
+            echo "Количество дней между датами: " . diff_days($birthdate);
         ?>
+
     </main>
+
     <?php
         include_once("footer.php");

@@ -1,6 +1,7 @@
-<?php
-require_once("header.php");
-?>
+    <?php
+        require_once("header.php");
+    ?>
+
     <main class="main">
     <h3>Таблица элементов</h3>
     <!-- Определим основную таблицу-контейнер размером 4x4, в которой каждая ячейка будет представлять
@@ -304,7 +305,7 @@ require_once("header.php");
                                 </td>
                             </tr>
                             <tr>
-                                <td class="table-table-name text-left" colspan="2">Кальций</td>
+                                <td class="table-name text-left" colspan="2">Кальций</td>
                             </tr>
                         </table>
                     </a>
@@ -361,5 +362,6 @@ require_once("header.php");
         </tr>
     </table>
     </main>
+
     <?php
         include_once("footer.php");
