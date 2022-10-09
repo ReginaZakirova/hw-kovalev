@@ -37,6 +37,9 @@ body {
 .blue {
     color: #0080c0;
 }
+.center {
+    text-align: center;
+}
 
 /*************************************/
 /*            Стили header           */

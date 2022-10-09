@@ -22,6 +22,7 @@
                     <li><a href="loop.php">ЦИКЛЫ</a></li>
                     <li><a href="array.php">МАССИВЫ</a></li>
                     <li><a href="string.php">СТРОКИ</a></li>
+                    <li><a href="enter.php"><img src="Images/Enter.png" alt="Вход"></a></li>
                 </ul>
             </nav>
         </div>
