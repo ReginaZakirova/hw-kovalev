@@ -49,7 +49,7 @@ body {
     border: 1px solid #c0c0c0;
     border-radius: 10px;
     margin: 20px 0;
-    padding: 20px 10px 20px 20px;
+    padding: 20px;
 }
 .header-wrapper {
     display: flex;
@@ -61,6 +61,7 @@ body {
 }
 .nav-ul {
     display: flex;
+    align-items: center;
     list-style: none;
     font-size: 14px;
 }
@@ -150,12 +151,18 @@ body {
 /*             Стили footer            */
 /***************************************/
 .footer {
-    height: 70px;
+    height: 80px;
     background-color: #f7f7f7;
     border: 1px solid #c0c0c0;
     border-radius: 10px;
     margin: 20px 0;
     padding: 20px;
+}
+.form-color {
+    width: 150px;
+}
+.footer-select {
+    margin-bottom: 7px;
 }
 
 /*************************************/

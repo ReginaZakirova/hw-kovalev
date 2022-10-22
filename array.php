@@ -1,6 +1,7 @@
-    <?php
-        require_once("header.php");
-    ?>
+<?php
+    require_once("prephp.php"); // Подключение файла с предварительным кодом PHP общим для всех страниц.
+    require_once("header.php"); // Подключение файла с содержимым заголовочной части HTML кода для всех страниц.
+?>
 
     <main class="main">
         <h3>Массивы</h3>
