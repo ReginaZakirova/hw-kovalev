@@ -22,16 +22,35 @@
     }
     /* Проверка условий авторизации */
     if (!empty($_POST)) {
-        if ($arr_password[$_POST["login"]] == md5($_POST["password"])) {
+        /* Подключение базы данных */
+        $hostname = "localhost";
+        $db_name = "site";
+        $db_user = "Victor";
+        $db_password = "1";
+        $db_con = mysqli_connect($hostname, $db_user, $db_password, $db_name);
+        /* Если база данных не была успешно подключена остановить дальнейшее выполнение и выдать сообщение */
+        if (!$db_con) {
+            die("<br>Ошибка базы данных! Обратитесь к администратору сайта!");
+        }
+        else {
+            mysqli_set_charset($db_con, 'utf8');
+            /* Формирование SQL запроса к таблице "auth" базы данных "site" c целью получения хранящегося
+               md5-хэша пароля для текущего логина из POST запроса */
+            $query = "SELECT password FROM auth WHERE login = '" . $_POST["login"] . "'";
+            $result = mysqli_query($db_con, $query);
+            /* Преобразование ответа СУБД в формат ассоциативного массива */
+            $result_array = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            /* Проверка соответствия md5-хэша пароля из базы данных и из POST запроса */
+            if ($result_array[0]["password"] == md5($_POST["password"])) {
                 /* Будем иницировать новую сессию только для авторизованных пользователей! */
                 session_start();
                 $_SESSION["login"] = $_POST["login"];    // Текущий пользователь сессии
                 /* После успешной авторизации переходим на главную страницу сайта */
                 header("Location: index.php");
-                }
-            else {
+            } else {
                 $auth_fail = true;  // Флаг проваленной авторизации
             }
+        }
     }
     /* Проверка нажатия кнопки выхода из аккаунта и ликвидации сессии */
     if ($_GET["logout"] == "1") {
