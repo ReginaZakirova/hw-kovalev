@@ -1,4 +1,6 @@
 <?php
+    require_once("Database.php"); // Подключение файла с описанием класса Database (подключение и запросы к БД)
+
     /* Массив хранящий пары Логин - md5-хэш пароля */
     $arr_password = [
         "Виктор" => "698d51a19d8a121ce581499d7b701668", // md5-хэш для пароля 111
@@ -22,26 +24,14 @@
     }
     /* Проверка условий авторизации */
     if (!empty($_POST)) {
-        /* Подключение базы данных */
-        $hostname = "localhost";
-        $db_name = "site";
-        $db_user = "Victor";
-        $db_password = "1";
-        $db_con = mysqli_connect($hostname, $db_user, $db_password, $db_name);
+        /* Создание нового объекта класса Database. */
+        $db = new Database("localhost", "Victor", "1", "site");
         /* Если база данных не была успешно подключена остановить дальнейшее выполнение и выдать сообщение */
-        if (!$db_con) {
+        if (!($db->dbConnect())) {
             die("<br>Ошибка базы данных! Обратитесь к администратору сайта!");
         }
         else {
-            mysqli_set_charset($db_con, 'utf8');
-            /* Формирование SQL запроса к таблице "auth" базы данных "site" c целью получения хранящегося
-               md5-хэша пароля для текущего логина из POST запроса */
-            $query = "SELECT password FROM auth WHERE login = '" . $_POST["login"] . "'";
-            $result = mysqli_query($db_con, $query);
-            /* Преобразование ответа СУБД в формат ассоциативного массива */
-            $result_array = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            /* Проверка соответствия md5-хэша пароля из базы данных и из POST запроса */
-            if ($result_array[0]["password"] == md5($_POST["password"])) {
+            if (($db->dbPasswordQuery($_POST["login"])) == md5($_POST["password"])) {
                 /* Будем иницировать новую сессию только для авторизованных пользователей! */
                 session_start();
                 $_SESSION["login"] = $_POST["login"];    // Текущий пользователь сессии
